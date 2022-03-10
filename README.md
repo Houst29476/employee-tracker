@@ -1,4 +1,4 @@
-![Employee_Tracker](https://user-images.githubusercontent.com/95327275/157774387-8ccdf46c-8273-49d3-b19a-ea2b0e9316c5.png)
+![Employee_Tracker](https://user-images.githubusercontent.com/95327275/157774974-2624b4ee-223a-4407-867d-f8c7002d7436.png)
 
 # Table of Contents
 
