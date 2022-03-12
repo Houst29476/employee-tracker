@@ -282,3 +282,50 @@ const addEmployee = () => {
 };
 
 // ------ Update an Employee Role ------ //
+const updateEmployeeRole = () => {
+  let employeesArray = []
+
+  connection.query(
+    `SELECT first_name, last_name FROM employee`,
+    (err, res) => {
+      if (err) throw err;
+      prompt([
+        {
+          type: "list",
+          name: "employee",
+          message: "Which employee has a new role?",
+          choices() {
+            res.forEach(employee => {
+              employeesArray.push(`${employee.first_name} ${employee.last_name}`);
+            });
+            return employeesArray;
+          }
+        },
+        {
+          type: "input",
+          name: "role",
+          message: `Enter the new role ID from the choices below. ${('\nDesigner: 1\nSenior Designer: 2\nPresident: 3\nIntern: 4\nConsultant: 5\nPress: 6\nTemp: 7\n'('Your Answer: '))}`
+        }
+      
+      ]).then( (answer) => {
+
+        const updateEmployeeRole = answer.employee.split(' ');
+        const updateEmployeeRoleFirstName = JSON.stringify(updateEmployeeRole[0]);
+        const updateEmployeeRoleLastName = JSON.stringify(updateEmployeeRole[1]);
+
+        connection.query(
+          `UPDATE employee
+          SET role_id = ${answer.role}
+          WHERE first_name = ${updateEmployeeRoleFirstName}
+          AND last_name = ${updateEmployeeRoleLastName}`,
+
+          (err, res) => {
+            if (err) throw err;
+            console.log("Employee role updated successfully!");
+            viewAllEmployees();
+          }
+        );
+      });
+    }
+  );
+};
