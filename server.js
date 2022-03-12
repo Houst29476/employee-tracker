@@ -3,8 +3,6 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 prompt = inquirer.createPromptModule();
 
-const PORT = process.env.PORT || 3001;
-const app = express();
 
 
 // ------ Start Server after DB Connection ------ //
@@ -86,7 +84,7 @@ const viewAllDepartments = () => {
   let sql = `SELECT department.id AS id, department.department_name AS department FROM department`;
 
   connection.query(sql, (err, res) => {
-    if (err) throw err:
+    if (err) throw err;
 
     console.log("List of Departments:\n");
     console.table(res);
@@ -102,7 +100,7 @@ const viewAllRoles = () => {
   INNER JOIN department ON role.department_id = department.id`;
 
   connection.query(sql, (err, res) => {
-    if (err) throw err:
+    if (err) throw err;
 
     console.log("List of Departments:\n");
     console.table(res);
