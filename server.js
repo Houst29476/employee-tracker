@@ -8,7 +8,6 @@ prompt = inquirer.createPromptModule();
 // ------ Start Server after DB Connection ------ //
 connection.connect((err) => {
   if (err) throw err;
-  console.log('Database Connected!');
 });
 
 // ------ Welcome Message ------ //
@@ -202,7 +201,7 @@ const addRole = () => {
         });
 
         let sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
-        let crit = [createdRole, ansswer.salary, departmentId];
+        let crit = [createdRole, answer.salary, departmentId];
 
         connection.query(sql, crit, (err) => {
           if (err) throw err;
