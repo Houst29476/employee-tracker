@@ -8,7 +8,7 @@ const app = express();
 
 
 // ------ Start Server after DB Connection ------ //
-connection.connect((error) => {
+connection.connect((err) => {
   if (err) throw err;
   console.log('Database Connected!');
   app.listen(PORT, () => {
@@ -81,20 +81,58 @@ function menu() {
   });
 }
 
-
-
-
-
 // ------ View All Departments ------ //
+const viewAllDepartments = () => {
+  let sql = `SELECT department.id AS id, department.department_name AS department FROM department`;
 
+  connection.query(sql, (err, res) => {
+    if (err) throw err:
 
+    console.log("List of Departments:\n");
+    console.table(res);
+    
+    menu();
+  });
+};
 
-// ------ View All Positions ------ //
+// ------ View All Roles ------ //
+const viewAllRoles = () => {
+  let sql = `SELECT role.id, role.title, department.department_name AS department
+  FROM role
+  INNER JOIN department ON role.department_id = department.id`;
 
+  connection.query(sql, (err, res) => {
+    if (err) throw err:
 
-
+    console.log("List of Departments:\n");
+    console.table(res);
+    
+    menu();
+  });
+};
 
 // ------ View All Employees ------ //
+const viewAllEmployees = () => {
+  let sql = `SELECT employee.id,
+              employee.first_name,
+              employee.last_name,
+              role.title,
+              department.department_name AS 'department',
+              role.salary
+              FROM employee, role, department
+              WHERE department.id = role.department_id
+              AND role.id = employee.role_id
+              ORDER BY employee.id ASC`;
+  
+  connection.query(sql, (err, res) => {
+    if (err) throw err;
+    
+    console.log("All Employees:\n");
+    console.table(res);
+    
+    menu();
+  });
+};
 
 
 
