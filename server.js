@@ -42,12 +42,12 @@ function menu() {
         message: 'What would you like to do?',
         choices: [
           'View All Departments',
-          'View All Positions',
+          'View All Roles',
           'View All Employees',
           'Add a Department to an Employee',
-          'Add a Title to an Employee',
+          'Add a Role to an Employee',
           'Add a New Employee',
-          'Update Employee Title',
+          'Update Employee Role',
           'Exit',
         ],
       },
@@ -58,7 +58,7 @@ function menu() {
       viewAllDepartments();
     }
     if (choices === 'View All Positions') {
-      viewAllPositions();
+      viewAllRoles();
     }
     if (choices === 'View All Employees') {
       viewAllEmployees();
@@ -66,8 +66,8 @@ function menu() {
     if (choices === 'Add a Department to an Employee') {
       addDepartment();
     }
-    if (choices === 'Add a Title to an Employee') {
-      addTitle();
+    if (choices === 'Add a Role to an Employee') {
+      addRole();
     }
     if (choices === 'Add a New Employee') {
       addEmployee();
@@ -102,7 +102,7 @@ const viewAllRoles = () => {
   connection.query(sql, (err, res) => {
     if (err) throw err;
 
-    console.log("List of Departments:\n");
+    console.log("List of Roles:\n");
     console.table(res);
     
     menu();
@@ -132,16 +132,90 @@ const viewAllEmployees = () => {
   });
 };
 
-
-
 // ------ Add a Department to an Employee ------ //
-
-
-
+const addDepartment = () => {
+prompt([
+    {
+      name: 'newDepartment',
+      type: 'input',
+      message: 'Enter the name of the new department:'
+    }
+  ])
+  .then((answer) => {
+    let sql = `INSERT INTO department (department_name) VALUES (?)`;
+    
+    connection.query(sql, answer.newDepartment, (err, res) => {
+      if (err) throw err;
+      
+      console.log(answer.newDepartment + "Deparment added successfully!");
+      viewAllDepartments();
+    });
+  });
+};
 
 // ------ Add a Role to an Employee ------ //
+const addRole = () => {
+  const sql = "SELECT * FROM department";
+  connection.query(sql, (err, res) => {
+    if (err) throw err;
 
+    let deptNamesArray = [];
+    response.forEach((department) => {
+      deptNamesArray.push(department.department_name);
+    });
 
+    deptNamesArray.push("Create Department");
+    prompt([
+      {
+        name: "departmentName",
+        type: "list",
+        message: "Which department will you add this role to?",
+        choices: deptNamesArray,
+      },
+
+    ]).then((answer) => {
+      if (answer.departmentName === "Create Department") {
+        this.addDepartment();
+      } else {
+        addRoleResume(answer);
+      }
+    });
+
+    const addRoleResume = (departmentData) => {
+      prompt([
+        {
+          name: "newRole",
+          type: "input",
+          message: "What is the name of the new role?",
+        },
+        {
+          name: "salary",
+          type: "input",
+          message: "What is the salary of the new employee?",
+        },
+      
+      ]).then((answer) => {
+        let createdRole = answer.newRole;
+        let departmentId;
+
+        response.forEach((department) => {
+          if (departmentData.departmentName === department.department_name) {
+            departmentId = department.id;
+          }
+        });
+
+        let sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+        let crit = [createdRole, ansswer.salary, departmentId];
+
+        connection.query(sql, crit, (err) => {
+          if (err) throw err;
+          console.log("Role created successfully!");
+          viewAllRoles();
+        });
+      });
+    };
+  });
+};
 
 // ------ Add New Employee ------ //
 
