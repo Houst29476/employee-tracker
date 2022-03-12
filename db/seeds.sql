@@ -6,7 +6,7 @@ VALUES
   ('Management'), 
   ('Legal');
 
-INSERT INTO role (title, salary, department_id)
+INSERT INTO title (title, salary, department_id)
 VALUES
   ('Engineer', 80000, 1), 
   ('Senior Engineer', 120000, 1), 
@@ -20,7 +20,7 @@ VALUES
   ('Sales Team Lead', 60000, 2), 
   ('Intern', 30000, 2);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employee (first_name, last_name, title_id, manager_id)
 VALUES 
   ('Walter', 'White', 2, 2), 
   ('Jesse', 'Pinkman', 1, null), 
@@ -34,15 +34,15 @@ VALUES
   ('Tuco', 'Salamanca', 11, null), 
   ('Huell', 'Babineaux', 9, null);
 
-------- Role ID Numbers --------
--- engineer = role_id 1
--- senior engineer = role_id 2
--- president = role_id 3
--- vice president = role_id 4
--- accountant = role_id 5
--- account manager = role_id 6
--- legal team lead = role_id 7
--- lawyer = role_id 8
--- salesperson = role_id 9
--- sales team lead = role_id 10
--- intern = role_id 11
+------- Title ID Numbers --------
+-- engineer = title_id 1
+-- senior engineer = title_id 2
+-- president = title_id 3
+-- vice president = title_id 4
+-- accountant = title_id 5
+-- account manager = title_id 6
+-- legal team lead = title_id 7
+-- lawyer = title_id 8
+-- salesperson = title_id 9
+-- sales team lead = title_id 10
+-- intern = title_id 11

@@ -44,12 +44,12 @@ function menu() {
         message: 'What would you like to do?',
         choices: [
           'View All Departments',
-          'View All Roles',
+          'View All Positions',
           'View All Employees',
           'Add a Department to an Employee',
-          'Add a Role to an Employee',
+          'Add a Title to an Employee',
           'Add a New Employee',
-          'Update Employee Role',
+          'Update Employee Title',
           'Exit',
         ],
       },
@@ -59,8 +59,8 @@ function menu() {
     if (choices === 'View All Deparments') {
       viewAllDepartments();
     }
-    if (choices === 'View All Roles') {
-      viewAllRoles();
+    if (choices === 'View All Positions') {
+      viewAllPositions();
     }
     if (choices === 'View All Employees') {
       viewAllEmployees();
@@ -68,8 +68,8 @@ function menu() {
     if (choices === 'Add a Department to an Employee') {
       addDepartment();
     }
-    if (choices === 'Add a Role to an Employee') {
-      addRole();
+    if (choices === 'Add a Title to an Employee') {
+      addTitle();
     }
     if (choices === 'Add a New Employee') {
       addEmployee();
@@ -89,7 +89,7 @@ function menu() {
 
 
 
-// ------ View All Roles ------ //
+// ------ View All Positions ------ //
 
 
 
