@@ -1,6 +1,7 @@
 const connection = require("./db/connection");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
+const { query } = require("./db/connection");
 prompt = inquirer.createPromptModule();
 
 
@@ -75,10 +76,10 @@ function menu() {
 }
 
 // ------ View All Departments ------ //
-const viewAllDepartments = () => {
-  let sql = `SELECT * FROM employee_tracker.department`;
+function viewAllDepartments() {
+  let query = `SELECT * FROM employee_tracker.department`;
 
-  connection.query(sql, (err, res) => {
+  connection.query(query, function (err, res) {
     if (err) throw err;
 
     console.log(res.length + ' department found.');
@@ -90,26 +91,23 @@ const viewAllDepartments = () => {
 };
 
 // ------ View All Roles ------ //
-const viewAllRoles = () => {
-  let sql = `SELECT roles.id, roles.title, departments.departments_name AS departments
-  FROM roles
-  INNER JOIN departments ON roles.departments_id = department.id`;
+function viewAllRoles () {
+  let query = `SELECT * FROM employee_tracker.roles`;
 
-  connection.query(sql, (err, res) => {
+  connection.query(query, function (err, res) {
     if (err) throw err;
 
-    console.log(("List of Roles:\n"));
-    response.forEach((role) => {
-      console.log(roles.title);
-    });
-       
+    console.log(res.length + ' role found.');
+    console.log("All Roles")
+    console.table(res);
+          
     menu();
   });
 };
 
 // ------ View All Employees ------ //
-const viewAllEmployees = () => {
-  let sql = `SELECT employee.id, employee.first_name, employee.last_name,
+function viewAllEmployees () {
+  let query = `SELECT employee.id, employee.first_name, employee.last_name,
               roles.title, department_name AS 'department_name', roles.salary,
               concat(manager.first_name, " ", manager.last_name) AS manager_full_name
               FROM employee 
@@ -117,7 +115,7 @@ const viewAllEmployees = () => {
               LEFT JOIN department ON department.id = roles.department_id
               LEFT JOIN employee as manager ON employee.manager_id = manager.id;`;
                 
-  connection.query(sql, (err, res) => {
+  connection.query(query, function (err, res) {
     if (err) throw err;
     console.log(res.length + 'employee found.');
     console.log("All Employee");
@@ -125,7 +123,7 @@ const viewAllEmployees = () => {
     
     menu();
   });
-};
+}
 
 // ------ Add a Department to an Employee ------ //
 const addDepartment = () => {
