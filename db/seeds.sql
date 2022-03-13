@@ -1,6 +1,6 @@
 USE employee_tracker;
 
-INSERT INTO department (department_name)
+INSERT INTO departments (department_name)
 VALUES
   ('Engineering'), 
   ('Sales'), 
@@ -22,7 +22,7 @@ VALUES
   ('Sales Team Lead', 60000, 2), 
   ('Intern', 30000, 2);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES 
   ('Walter', 'White', 2, 2), 
   ('Jesse', 'Pinkman', 1, null), 
@@ -36,11 +36,11 @@ VALUES
   ('Tuco', 'Salamanca', 11, null), 
   ('Huell', 'Babineaux', 9, null);
 
-SELECT * FROM department;
+SELECT * FROM departments;
 
 SELECT * FROM roles;
 
-SELECT * FROM department;
+SELECT * FROM employees;
 
 ------- role ID Numbers --------
 -- engineer = role_id 1

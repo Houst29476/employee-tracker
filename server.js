@@ -1,7 +1,7 @@
 const connection = require("./db/connection");
-const inquirer = require("inquirer");
+const inquirer = require('inquirer');
 const cTable = require("console.table");
-const { query } = require("./db/connection");
+
 prompt = inquirer.createPromptModule();
 
 
@@ -50,7 +50,7 @@ function menu() {
   
   ]).then((answers) => {
     const { choices } = answers;
-    if (choices === 'View All Deparments') {
+    if (choices === 'View All Departments') {
       viewAllDepartments();
     }
     if (choices === 'View All Roles') {
@@ -77,12 +77,11 @@ function menu() {
 
 // ------ View All Departments ------ //
 function viewAllDepartments() {
-  let query = `SELECT * FROM employee_tracker.department`;
+  let query = `SELECT * FROM employee_tracker.departments`;
 
   connection.query(query, function (err, res) {
     if (err) throw err;
 
-    console.log(res.length + ' department found.');
     console.log("All Departments")
     console.table(res);
     
@@ -97,7 +96,6 @@ function viewAllRoles () {
   connection.query(query, function (err, res) {
     if (err) throw err;
 
-    console.log(res.length + ' role found.');
     console.log("All Roles")
     console.table(res);
           
@@ -107,18 +105,18 @@ function viewAllRoles () {
 
 // ------ View All Employees ------ //
 function viewAllEmployees () {
-  let query = `SELECT employee.id, employee.first_name, employee.last_name,
+  let query = `SELECT employees.id, employees.first_name, employees.last_name,
               roles.title, department_name AS 'department_name', roles.salary,
               concat(manager.first_name, " ", manager.last_name) AS manager_full_name
-              FROM employee 
-              LEFT JOIN roles ON employee.roles_id = roles.id
+              FROM employees 
+              LEFT JOIN roles ON employees.role_id = roles.id
               LEFT JOIN department ON department.id = roles.department_id
-              LEFT JOIN employee as manager ON employee.manager_id = manager.id;`;
+              LEFT JOIN employee as manager ON employees.manager_id = manager.id;`;
                 
   connection.query(query, function (err, res) {
     if (err) throw err;
-    console.log(res.length + 'employee found.');
-    console.log("All Employee");
+    
+    console.log("All Employees");
     console.table(res);
     
     menu();
