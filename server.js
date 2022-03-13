@@ -41,10 +41,14 @@ function menu() {
           'View All Managers',
           'View All Roles',
           'View All Employees',
-          'Add a Department to an Employee',
-          'Add a Role to an Employee',
-          'Add a New Employee',
+          'Add a Department',
+          'Add a Role',
+          'Add Employee',
           'Update Employee Role',
+          'Update Employee Manager',
+          'Delete Department',
+          'Delete Role',
+          'Delete Employee',
           'Exit',
         ],
       },
@@ -63,14 +67,29 @@ function menu() {
     if (choices === 'View All Employees') {
       viewAllEmployees();
     }
-    if (choices === 'Add a Department to an Employee') {
+    if (choices === 'Add a Department') {
       addDepartment();
     }
-    if (choices === 'Add a Role to an Employee') {
+    if (choices === 'Add a Role') {
       addRole();
     }
-    if (choices === 'Add a New Employee') {
+    if (choices === 'Add Employee') {
       addEmployee();
+    }
+    if (choices === 'Update Employee Role') {
+      updateEmplRole();
+    }
+    if (choices === 'Update Employee Manager') {
+      updateEmpMgr();
+    }
+    if (choices === 'Delete Deparment') {
+      deleteDept();
+    }
+    if (choices === 'Delete Role') {
+      deleteRole();
+    }
+    if (choices === 'Delete Employee') {
+      deleteEmpl();
     }
     if (choices === 'Exit') {
       console.log('Thank You for Stopping By!');
@@ -342,11 +361,34 @@ const updateEmployeeRoles = () => {
 
 
 
-// function viewAllEmployees () {
-//   let query = `SELECT employees.id, employees.first_name, employees.last_name,
-//               roles.title, departments_name AS 'departments_name', roles.salary,
-//               concat(manager.first_name, " ", manager.last_name) AS manager_full_name
-//               FROM employees 
-//               LEFT JOIN roles ON employees.role_id = roles.id
-//               LEFT JOIN departments ON departments.id = roles.department_id
-//               LEFT JOIN employee as manager ON employees.manager_id = manager.id;`;
+const viewByManager = () => {
+  let employee = {
+    id: [],
+    name: [],
+  };
+  let sql = "SELECT * FROM employee";
+  con.query(sql, (err, row) => {
+    if (err) throw err;
+    for (emp of row) {
+      employees.name.push(emp.first_name + " " + emp.last_name);
+      employees.id.push(emp.id);
+    }
+    inquirer
+      .prompt({
+        name: "name",
+        type: "list",
+        message: "Select employee",
+        choices: employee.name,
+      })
+      .then((input) => {
+        let index = employee.name.indexOf(input.name);
+        let man_id = employee.id[index];
+        let sql2 = `SELECT * FROM employee WHERE manager_id="${man_id}"`;
+        con.query(sql2, (err, row) => {
+          if (err) throw err;
+          console.table(row);
+          start();
+        });
+      });
+  });
+};
