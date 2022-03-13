@@ -34,7 +34,7 @@ VALUES
   ('Skyler', 'White', '3', '3'), 
   ('Todd', 'Alquist', '6', null), 
   ('Steven', 'Gomez', '5', null), 
-  ('Gus', 'Fring', '4', null), 
+  ('Gus', 'Fring', '4', '4'), 
   ('Mike', 'Ehrmantraut', '10', null), 
   ('Tuco', 'Salamanca', '11', null), 
   ('Huell', 'Babineaux', '9', null);

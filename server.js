@@ -95,7 +95,9 @@ function viewAllDepartments() {
 
 // ------ View All Managers ------ //
 function viewAllManagers() {
-  let query = `SELECT DISTINCT concat(manager.first_name, " ", manager.last_name) AS full_name FROM employees LEFT JOIN employee AS manager ON manager.id = employees.manager_id;`;
+  let query = `SELECT DISTINCT concat(manager.first_name, " ", manager.last_name) AS full_name 
+  FROM employees 
+  LEFT JOIN employee AS manager ON manager.id = employees.manager_id;`;
 
   connection.query(query, function (err, res) {
     if (err) throw err;
@@ -121,9 +123,9 @@ function viewAllRoles () {
 
 // ------ View All Employees ------ //
 function viewAllEmployees() {
-  let query = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments_name AS departments_name, concat(manager.first_name, " ", manager.last_name) AS manager_full_name 
+  let query = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments_name AS departments_name, concat(manager.first_name, " ", manager.last_name) AS manager_full_name
   FROM employees 
-  LEFT JOIN roles ON employees.roles_id = roles.id
+  LEFT JOIN roles ON employees.role_id = roles.id
   LEFT JOIN departments ON departments.id = roles.departments_id
   LEFT JOIN employees as manager ON employees.manager_id = manager.id;`;
 
@@ -132,6 +134,8 @@ function viewAllEmployees() {
 
     console.log("All Employees")
     console.table(res);
+
+    menu();
   });
 }
 
