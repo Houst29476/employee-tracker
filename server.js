@@ -37,58 +37,58 @@ function menu() {
         type: 'list',
         message: 'What would you like to do?',
         choices: [
-          'View All Departments',
-          'View All Managers',
-          'View All Roles',
-          'View All Employees',
-          'Add a Department',
-          'Add a Role',
-          'Add Employee',
-          'Update Employee Role',
-          'Update Employee Manager',
-          'Delete Department',
-          'Delete Role',
-          'Delete Employee',
+          '(1) View All Departments',
+          '(2) View All Managers',
+          '(3) View All Roles',
+          '(4) View All Employees',
+          '(5) Add a Department',
+          '(6) Add a Role',
+          '(7) Add Employee',
+          '(8) Update Employee Role',
+          '(9) Update Employee Manager',
+          '(10) Delete Department',
+          '(11) Delete Role',
+          '(12) Delete Employee',
           'Exit',
         ],
       },
   
   ]).then((answers) => {
     const { choices } = answers;
-    if (choices === 'View All Departments') {
+    if (choices === '(1) View All Departments') {
       viewAllDepartments();
     }
-    if (choices === 'View All Managers') {
+    if (choices === '(2) View All Managers') {
       viewAllManagers();
     }
-    if (choices === 'View All Roles') {
+    if (choices === '(3) View All Roles') {
       viewAllRoles();
     }
-    if (choices === 'View All Employees') {
+    if (choices === '(4) View All Employees') {
       viewAllEmployees();
     }
-    if (choices === 'Add a Department') {
+    if (choices === '(5) Add a Department') {
       addDepartment();
     }
-    if (choices === 'Add a Role') {
+    if (choices === '(6) Add a Role') {
       addRole();
     }
-    if (choices === 'Add Employee') {
+    if (choices === '(7) Add Employee') {
       addEmployee();
     }
-    if (choices === 'Update Employee Role') {
+    if (choices === '(8) Update Employee Role') {
       updateEmplRole();
     }
-    if (choices === 'Update Employee Manager') {
+    if (choices === '(9) Update Employee Manager') {
       updateEmpMgr();
     }
-    if (choices === 'Delete Deparment') {
+    if (choices === '(10) Delete Deparment') {
       deleteDept();
     }
-    if (choices === 'Delete Role') {
+    if (choices === '(11) Delete Role') {
       deleteRole();
     }
-    if (choices === 'Delete Employee') {
+    if (choices === '(12) Delete Employee') {
       deleteEmpl();
     }
     if (choices === 'Exit') {
@@ -114,15 +114,18 @@ function viewAllDepartments() {
 
 // ------ View All Managers ------ //
 function viewAllManagers() {
-  let query = `SELECT DISTINCT concat(manager.first_name, " ", manager.last_name) AS full_name 
+  let query = `
+  SELECT DISTINCT concat(manager.first_name, " ", manager.last_name) AS full_name 
   FROM employees 
-  LEFT JOIN employee AS manager ON manager.id = employees.manager_id;`;
+  LEFT JOIN employees AS manager ON manager.id = employees.manager_id;`;
 
   connection.query(query, function (err, res) {
     if (err) throw err;
 
     console.log("All Managers")
     console.table(res);
+
+    menu();
   });
 }
 
@@ -359,36 +362,3 @@ const updateEmployeeRoles = () => {
   );
 };
 
-
-
-const viewByManager = () => {
-  let employee = {
-    id: [],
-    name: [],
-  };
-  let sql = "SELECT * FROM employee";
-  con.query(sql, (err, row) => {
-    if (err) throw err;
-    for (emp of row) {
-      employees.name.push(emp.first_name + " " + emp.last_name);
-      employees.id.push(emp.id);
-    }
-    inquirer
-      .prompt({
-        name: "name",
-        type: "list",
-        message: "Select employee",
-        choices: employee.name,
-      })
-      .then((input) => {
-        let index = employee.name.indexOf(input.name);
-        let man_id = employee.id[index];
-        let sql2 = `SELECT * FROM employee WHERE manager_id="${man_id}"`;
-        con.query(sql2, (err, row) => {
-          if (err) throw err;
-          console.table(row);
-          start();
-        });
-      });
-  });
-};
