@@ -38,6 +38,7 @@ function menu() {
         message: 'What would you like to do?',
         choices: [
           'View All Departments',
+          'View All Managers',
           'View All Roles',
           'View All Employees',
           'Add a Department to an Employee',
@@ -52,6 +53,9 @@ function menu() {
     const { choices } = answers;
     if (choices === 'View All Departments') {
       viewAllDepartments();
+    }
+    if (choices === 'View All Managers') {
+      viewAllManagers();
     }
     if (choices === 'View All Roles') {
       viewAllRoles();
@@ -89,6 +93,18 @@ function viewAllDepartments() {
   });
 };
 
+// ------ View All Managers ------ //
+function viewAllManagers() {
+  let query = `SELECT DISTINCT concat(manager.first_name, " ", manager.last_name) AS full_name FROM employees LEFT JOIN employee AS manager ON manager.id = employees.manager_id;`;
+
+  connection.query(query, function (err, res) {
+    if (err) throw err;
+
+    console.log("All Managers")
+    console.table(res);
+  });
+}
+
 // ------ View All Roles ------ //
 function viewAllRoles () {
   let query = `SELECT * FROM employee_tracker.roles`;
@@ -104,22 +120,18 @@ function viewAllRoles () {
 };
 
 // ------ View All Employees ------ //
-function viewAllEmployees () {
-  let query = `SELECT employees.id, employees.first_name, employees.last_name,
-              roles.title, department_name AS 'department_name', roles.salary,
-              concat(manager.first_name, " ", manager.last_name) AS manager_full_name
-              FROM employees 
-              LEFT JOIN roles ON employees.role_id = roles.id
-              LEFT JOIN department ON department.id = roles.department_id
-              LEFT JOIN employee as manager ON employees.manager_id = manager.id;`;
-                
+function viewAllEmployees() {
+  let query = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, departments_name AS departments_name, concat(manager.first_name, " ", manager.last_name) AS manager_full_name 
+  FROM employees 
+  LEFT JOIN roles ON employees.roles_id = roles.id
+  LEFT JOIN departments ON departments.id = roles.departments_id
+  LEFT JOIN employees as manager ON employees.manager_id = manager.id;`;
+
   connection.query(query, function (err, res) {
     if (err) throw err;
-    
-    console.log("All Employees");
+
+    console.log("All Employees")
     console.table(res);
-    
-    menu();
   });
 }
 
@@ -323,3 +335,14 @@ const updateEmployeeRoles = () => {
     }
   );
 };
+
+
+
+// function viewAllEmployees () {
+//   let query = `SELECT employees.id, employees.first_name, employees.last_name,
+//               roles.title, departments_name AS 'departments_name', roles.salary,
+//               concat(manager.first_name, " ", manager.last_name) AS manager_full_name
+//               FROM employees 
+//               LEFT JOIN roles ON employees.role_id = roles.id
+//               LEFT JOIN departments ON departments.id = roles.department_id
+//               LEFT JOIN employee as manager ON employees.manager_id = manager.id;`;
