@@ -161,8 +161,8 @@ function viewAllEmployees() {
   });
 }
 
-// ------ Add a Department to an Employee ------ //
-const addDepartment = () => {
+// ------ Add a Department ------ //
+function addDepartment() {
 prompt([
     {
       name: 'newDepartment',
@@ -178,76 +178,82 @@ prompt([
       
       console.log(answer.newDepartment + "Department added successfully!");
       viewAllDepartments();
+
+      menu();
     });
   });
 };
 
-// ------ Add a Role to an Employee ------ //
-const addRoles = () => {
+// ------ Add a Role ------ //
+function addRole () {
   const sql = "SELECT * FROM departments";
   connection.query(sql, (err, res) => {
+    
     if (err) throw err;
-
+    // Logic to add new dept for the new role...
     let deptNamesArray = [];
-    response.forEach((department) => {
+    res.forEach((departments) => {
       deptNamesArray.push(departments.departments_name);
     });
-
     deptNamesArray.push("Create Department");
+    
     prompt([
       {
-        name: "departmentsName",
+        name: "departmentName",
         type: "list",
         message: "Which department will you add this role to?",
         choices: deptNamesArray,
       },
-
     ]).then((answer) => {
-      if (answer.departmentsName === "Create Department") {
+      if (answer.departmentName === "Create Department") {
         this.addDepartment();
       } else {
-        addRolesResume(answer);
+        addRoleResume(answer);
       }
     });
 
-    const addRolesResume = (departmentData) => {
+    const addRoleResume = (departmentData) => {
       prompt([
         {
           name: "newRole",
           type: "input",
-          message: "What is the name of the new role?",
+          message: "What is the name of your new role?",
         },
         {
           name: "salary",
           type: "input",
-          message: "What is the salary of the new employee?",
+          message: "What is the salary of this new role?",
         },
       
       ]).then((answer) => {
-        let createdRoles = answer.newRoles;
-        let departmentsId;
+        let createdRole = answer.newRole;
+        let departmentId;
 
-        response.forEach((departments) => {
-          if (departmentsData.departmentsName === departments.departments_name) {
-            departmentsId = departments.id;
+        res.forEach((departments) => {
+          if (departmentData.departmentName === departments.departments_name) {
+            departmentId = departments.id;
           }
         });
 
         let sql = `INSERT INTO roles (title, salary, departments_id) VALUES (?, ?, ?)`;
-        let crit = [createdRoles, answer.salary, departmentsId];
+        let crit = [createdRole, answer.salary, departmentId];
 
         connection.query(sql, crit, (err) => {
           if (err) throw err;
+          
           console.log("Role created successfully!");
           viewAllRoles();
+
+          menu();
         });
       });
     };
   });
 };
 
+
 // ------ Add New Employee ------ //
-const addEmployee = () => {
+function addEmployee() {
   prompt([
     {
       type: "input",
@@ -263,7 +269,7 @@ const addEmployee = () => {
   ]).then((answer) => {
     const crit = [answer.firstName, answer.lastName];
     const rolesSql = `SELECT roles.id, roles.title FROM roles`;
-    
+
     connection.query(rolesSql, (err, data) => {
       if (err) throw err;
       const roles = data.map(({ id, title }) => ({ name: title, value: id }));
@@ -280,31 +286,34 @@ const addEmployee = () => {
         const roles = rolesChoice.roles;
         crit.push(roles);
 
-        const managerSql = `SELECT * FROM employee`;
+        const managerSql = `SELECT * FROM employees`;
         connection.query(managerSql, (err, data) => {
           if (err) throw err;
-          const managers = data.map(({ id, first_name, last_name }) => ({
-            name: first_name + " " + last_name,
-            value: id,
+          const manager = data.map(({ id, first_name, last_name }) => ({
+            name: first_name + " " + last_name, value: id,
           }));
+          
           prompt([
             {
               type: "list",
               name: "manager",
               message: "Who is the employee's manager?",
-              choices: managers,
+              choices: manager,
             },
           
           ]).then((managerChoice) => {
-            const manager = managerChoice.manager;
+            let manager = managerChoice.manager;
             crit.push(manager);
-            const sql = `INSERT INTO employee (first_name, last_name, roles_id, manager_id)
+            let sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
             VALUES (?, ?, ?, ?)`;
 
             connection.query(sql, crit, (err) => {
               if (err) throw err;
+              
               console.log("Employee added successfully!");
               viewAllEmployees();
+
+              menu();
             });
           });
         });
@@ -313,52 +322,52 @@ const addEmployee = () => {
   });
 };
 
-// ------ Update an Employee Role ------ //
-const updateEmployeeRoles = () => {
-  let employeesArray = []
+// // ------ Update an Employee Role ------ //
+// function updateEmployeeRoles() {
+//   let employeesArray = []
 
-  connection.query(
-    `SELECT first_name, last_name FROM employee`,
-    (err, res) => {
-      if (err) throw err;
-      prompt([
-        {
-          type: "list",
-          name: "employee",
-          message: "Which employee has a new role?",
-          choices() {
-            res.forEach(employee => {
-              employeesArray.push(`${employee.first_name} ${employee.last_name}`);
-            });
-            return employeesArray;
-          }
-        },
-        {
-          type: "input",
-          name: "role",
-          message: `Enter the new role ID from the choices below. ${('\nDesigner: 1\nSenior Designer: 2\nPresident: 3\nIntern: 4\nConsultant: 5\nPress: 6\nTemp: 7\n'('Your Answer: '))}`
-        }
+//   connection.query(
+//     `SELECT first_name, last_name FROM employees`,
+//     (err, res) => {
+//       if (err) throw err;
+//       prompt([
+//         {
+//           type: "list",
+//           name: "employee",
+//           message: "Which employee has a new role?",
+//           choices() {
+//             res.forEach(employee => {
+//               employeesArray.push(`${employee.first_name} ${employee.last_name}`);
+//             });
+//             return employeesArray;
+//           }
+//         },
+//         {
+//           type: "input",
+//           name: "role",
+//           message: `Enter the new role ID from the choices below. ${('\nDesigner: 1\nSenior Designer: 2\nPresident: 3\nIntern: 4\nConsultant: 5\nPress: 6\nTemp: 7\n'('Your Answer: '))}`
+//         }
       
-      ]).then( (answer) => {
+//       ]).then( (answer) => {
 
-        const updateEmployeeRoles = answer.employee.split(' ');
-        const updateEmployeeRolesFirstName = JSON.stringify(updateEmployeeRoles[0]);
-        const updateEmployeeRolesLastName = JSON.stringify(updateEmployeeRoles[1]);
+//         const updateEmployeeRoles = answer.employee.split(' ');
+//         const updateEmployeeRolesFirstName = JSON.stringify(updateEmployeeRoles[0]);
+//         const updateEmployeeRolesLastName = JSON.stringify(updateEmployeeRoles[1]);
 
-        connection.query(
-          `UPDATE employee
-          SET roles_id = ${answer.roles}
-          WHERE first_name = ${updateEmployeeRolesFirstName}
-          AND last_name = ${updateEmployeeRolesLastName}`,
+//         connection.query(
+//           `UPDATE employee
+//           SET roles_id = ${answer.roles}
+//           WHERE first_name = ${updateEmployeeRolesFirstName}
+//           AND last_name = ${updateEmployeeRolesLastName}`,
 
-          (err, res) => {
-            if (err) throw err;
-            console.log("Employee roles updated successfully!");
-            viewAllEmployees();
-          }
-        );
-      });
-    }
-  );
-};
+//           (err, res) => {
+//             if (err) throw err;
+//             console.log("Employee roles updated successfully!");
+//             viewAllEmployees();
+//           }
+//         );
+//       });
+//     }
+//   );
+// };
 
