@@ -251,7 +251,6 @@ function addRole () {
   });
 };
 
-
 // ------ Add New Employee ------ //
 function addEmployee() {
   prompt([
@@ -322,52 +321,52 @@ function addEmployee() {
   });
 };
 
-// // ------ Update an Employee Role ------ //
-// function updateEmployeeRoles() {
-//   let employeesArray = []
+// ------ Update an Employee Role ------ //
+function updateEmplRole() {
+  let employeesArray = []
 
-//   connection.query(
-//     `SELECT first_name, last_name FROM employees`,
-//     (err, res) => {
-//       if (err) throw err;
-//       prompt([
-//         {
-//           type: "list",
-//           name: "employee",
-//           message: "Which employee has a new role?",
-//           choices() {
-//             res.forEach(employee => {
-//               employeesArray.push(`${employee.first_name} ${employee.last_name}`);
-//             });
-//             return employeesArray;
-//           }
-//         },
-//         {
-//           type: "input",
-//           name: "role",
-//           message: `Enter the new role ID from the choices below. ${('\nDesigner: 1\nSenior Designer: 2\nPresident: 3\nIntern: 4\nConsultant: 5\nPress: 6\nTemp: 7\n'('Your Answer: '))}`
-//         }
+  connection.query(
+    `SELECT first_name, last_name FROM employees`,
+    (err, res) => {
+      if (err) throw err;
+      prompt([
+        {
+          type: "list",
+          name: "employee",
+          message: "Which employee has a new role?",
+          choices() {
+            res.forEach(employee => {
+              employeesArray.push(`${employee.first_name} ${employee.last_name}`);
+            });
+            return employeesArray;
+          }
+        },
+        {
+          type: "list",
+          name: "role",
+          message: `Enter the new role ID from the choices below. ${('\nDesigner: 1\nSenior Designer: 2\nPresident: 3\nIntern: 4\nConsultant: 5\nPress: 6\nTemp: 7\n'('Your Answer: '))}`
+        }
       
-//       ]).then( (answer) => {
+      ]).then( (answer) => {
 
-//         const updateEmployeeRoles = answer.employee.split(' ');
-//         const updateEmployeeRolesFirstName = JSON.stringify(updateEmployeeRoles[0]);
-//         const updateEmployeeRolesLastName = JSON.stringify(updateEmployeeRoles[1]);
+        const updateEmplRole = answer.employees.split(' ');
+        const updateEmployeeRolesFirstName = JSON.stringify(updateEmployeeRoles[0]);
+        const updateEmployeeRolesLastName = JSON.stringify(updateEmployeeRoles[1]);
 
-//         connection.query(
-//           `UPDATE employee
-//           SET roles_id = ${answer.roles}
-//           WHERE first_name = ${updateEmployeeRolesFirstName}
-//           AND last_name = ${updateEmployeeRolesLastName}`,
+        connection.query(
+          `UPDATE employees
+          SET roles_id = ${answer.roles}
+          WHERE first_name = ${updateEmployeeRolesFirstName}
+          AND last_name = ${updateEmployeeRolesLastName}`,
 
-//           (err, res) => {
-//             if (err) throw err;
-//             console.log("Employee roles updated successfully!");
-//             viewAllEmployees();
-//           }
-//         );
-//       });
-//     }
-//   );
-// };
+          (err, res) => {
+            if (err) throw err;
+            console.log("Employee roles updated successfully!");
+            viewAllEmployees();
+          }
+        );
+      });
+    }
+  );
+};
 
