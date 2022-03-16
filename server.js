@@ -283,7 +283,7 @@ function addEmployee() {
         },
       
       ]).then((rolesChoice) => {
-        const roles = rolesChoice.roles;
+        const roles = rolesChoice.role;
         crit.push(roles);
 
         const managerSql = `SELECT * FROM employees`;
