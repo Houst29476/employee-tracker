@@ -308,11 +308,11 @@ function addEmployee() {
 // ------ Update an Employee Role ------ //
 function updateEmplRole() {
   connection.query(`SELECT * , CONCAT(first_name, " ", last_name) AS "Fullname", 
-  roles.id , roles.title AS Role FROM employees 
+  employees.id , roles.title AS Role FROM employees 
   LEFT JOIN roles ON employees.role_id = roles.id;`,
     
   function (err, res) {
-      if (err) throw err;
+    if (err) throw err;
       
       inquirer.prompt([
         {
@@ -324,7 +324,6 @@ function updateEmplRole() {
             for (var i = 0; i < res.length; i++) {
               employeeRoleChoices.push(res[i].id + " " + res[i].Fullname);
             }
-            console.log(employeeRoleChoices);
             return employeeRoleChoices;
           },
         },
@@ -337,7 +336,6 @@ function updateEmplRole() {
             for (let i = 0; i < res.length; i++) {
               newRoleChoices.push(res[i].role_id + " " + res[i].Role);
             }
-            console.log(newRoleChoices);
             return newRoleChoices;
           },
         },
@@ -346,9 +344,14 @@ function updateEmplRole() {
         console.log(data)
         
         let chosenEmployee = data.updateRole.split("");
+        console.log(chosenEmployee);
+
         const Employee = chosenEmployee[0];
         let chosenNewRole = data.newRole.split("");
         const Role = chosenNewRole[0];
+
+        console.log(Role)
+        console.log(Employee)
 
         connection.query(`UPDATE employees SET role_id = ${Role} WHERE employees.id = ${Employee}`,
           
@@ -356,7 +359,8 @@ function updateEmplRole() {
           if (err) throw err;
           
           console.log("Your Employee's new role has been updated!");
-          
+          viewAllEmployees();
+
           menu();
           }
         );
