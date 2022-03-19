@@ -322,10 +322,11 @@ function updateEmplRole() {
           choices: function () {
             let employeeRoleChoices = [];
             for (var i = 0; i < res.length; i++) {
-              employeeRoleChoices.push(res[i].Fullname);
+              employeeRoleChoices.push(res[i].id + " " + res[i].Fullname);
             }
+            console.log(employeeRoleChoices);
             return employeeRoleChoices;
-          }
+          },
         },
         {
           name: "newRole",
@@ -334,31 +335,29 @@ function updateEmplRole() {
           choices: function () {
             let newRoleChoices = [];
             for (let i = 0; i < res.length; i++) {
-              newRoleChoices.push(res[i].Role);
+              newRoleChoices.push(res[i].role_id + " " + res[i].Role);
             }
+            console.log(newRoleChoices);
             return newRoleChoices;
           },
-        }
+        },
       
       ]).then(function (data) {
         console.log(data)
-        let chosenNewRole;
-        for (var i = 0; i < res.length; i++) {
-          chosenNewRole = + res[i].id;
-        }
-        connection.query(`UPDATE roles SET ? WHERE id = ?`,
-          [{
-            employeeRoleChoices: data.employees.id
-          },
-          {
-            newRoleChoices: data.roles.id
-          }],
-          function (err, res) {
-            if (err) throw err;
-            
-            console.log("Your Employee's new role has been updated!");
-            
-            menu();
+        
+        let chosenEmployee = data.updateRole.split("");
+        const Employee = chosenEmployee[0];
+        let chosenNewRole = data.newRole.split("");
+        const Role = chosenNewRole[0];
+
+        connection.query(`UPDATE employees SET role_id = ${Role} WHERE employees.id = ${Employee}`,
+          
+        function (err, res) {
+          if (err) throw err;
+          
+          console.log("Your Employee's new role has been updated!");
+          
+          menu();
           }
         );
       });
