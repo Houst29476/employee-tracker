@@ -308,7 +308,7 @@ function addEmployee() {
 // ------ Update an Employee Role ------ //
 function updateEmplRole() {
   connection.query(`SELECT * , CONCAT(first_name, " ", last_name) AS "Fullname", 
-  employees.id , roles.title AS Role FROM employees 
+  employees.id, roles.title AS Role FROM employees 
   LEFT JOIN roles ON employees.role_id = roles.id;`,
     
   function (err, res) {
