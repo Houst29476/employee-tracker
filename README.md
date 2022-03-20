@@ -30,7 +30,7 @@ bradley.boyd@gmail.com
 
 ## Description :
 
-This Express.js & MySQL based voting application for a local developer meetup group called U Develop It.
+This is a MySQL application interfaces that make it easy for bussiness owner to view and interact with information stored in databases. by using node, inquirer, and MySQL.
 
 ## Installation :
 
@@ -38,11 +38,13 @@ None required.
 
 ## Dependencies :
 
-npm i (express.js, mysql2, jest)
+To install the necessary dependencies, run the following command.
+
+Run npm init , npm install inquirer, npm install mysql.
 
 ## Useage :
 
-This MySQL database is the backend to a voting application of candidates, parties and votes. A user can run queries to view all elements of the election database. There is not a front-end website attached to this database.
+Type npm start or node index.js in console then the application will prompt the options.
 
 ## Credit :
 
