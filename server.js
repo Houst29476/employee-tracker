@@ -162,8 +162,6 @@ prompt([
       
       console.log(answer.newDepartment + "Department added successfully!");
       viewAllDepartments();
-
-      menu();
     });
   });
 };
@@ -227,8 +225,6 @@ function addRole () {
           
           console.log("Role created successfully!");
           viewAllRoles();
-
-          menu();
         });
       });
     };
@@ -295,8 +291,6 @@ function addEmployee() {
               
               console.log("Employee added successfully!");
               viewAllEmployees();
-
-              menu();
             });
           });
         });
@@ -308,11 +302,11 @@ function addEmployee() {
 // ------ Update an Employee Role ------ //
 function updateEmplRole() {
   connection.query(`SELECT * , CONCAT(first_name, " ", last_name) AS "Fullname", 
-  employees.id, roles.title AS Role FROM employees 
+  employees.id , roles.title AS Role FROM employees 
   LEFT JOIN roles ON employees.role_id = roles.id;`,
     
   function (err, res) {
-    if (err) throw err;
+      if (err) throw err;
       
       inquirer.prompt([
         {
@@ -325,7 +319,7 @@ function updateEmplRole() {
               employeeRoleChoices.push(res[i].id + " " + res[i].Fullname);
             }
             return employeeRoleChoices;
-          },
+          }
         },
         {
           name: "newRole",
@@ -338,32 +332,24 @@ function updateEmplRole() {
             }
             return newRoleChoices;
           },
-        },
+        }
       
-      ]).then(function (data) {
-        console.log(data)
-        
-        let chosenEmployee = data.updateRole.split("");
-        console.log(chosenEmployee);
-
-        const Employee = chosenEmployee[0];
-        let chosenNewRole = data.newRole.split("");
-        const Role = chosenNewRole[0];
-
-        console.log(Role)
-        console.log(Employee)
-
-        connection.query(`UPDATE employees SET role_id = ${Role} WHERE employees.id = ${Employee}`,
+        ]).then(function (data) {
+          console.log(data)
+          let chosenEmployee = data.updateRole.split("");
           
-        function (err, res) {
-          if (err) throw err;
-          
-          console.log("Your Employee's new role has been updated!");
-          viewAllEmployees();
-
-          menu();
-          }
-        );
+          const Employee = chosenEmployee[0];
+          let chosenNewRole = data.newRole.split("");
+          const Role = chosenNewRole[0];
+              
+          connection.query(`UPDATE employees SET role_id = ${Role} WHERE employees.id = ${Employee}`,
+            
+            function (err, res) {
+              if (err) throw err;
+              
+              console.log("Your Employee's new role has been updated!");
+              viewAllEmployees();
+            });
+        });
       });
-    });  
-};
+  };    
