@@ -1,5 +1,7 @@
 ![Employee_Tracker](https://user-images.githubusercontent.com/95327275/157774974-2624b4ee-223a-4407-867d-f8c7002d7436.png)
 
+https://user-images.githubusercontent.com/95327275/159144753-0003e0bb-72ad-44fd-b8ed-4061bddce29f.mp4
+
 # Table of Contents
 
 - [GitHub Profile](#GitHub-Profile)
